@@ -53,7 +53,7 @@ def process_trip():
         row2 = row2_raw.split(",")
         start_time = int(row1[2])
         if start_time < frame_start_time: continue
-        if start_time > frame_end_time: break
+        if start_time >= frame_end_time: break
         
         fare  = int(row1[10])
         did   = int(row2[4])
@@ -122,7 +122,7 @@ def process_log():
             # slice data stream
             time = int(row_one[0])
             if time < frame_start_time: continue
-            if time > frame_end_time: break
+            if time >= frame_end_time: break
             
             row = row_raw.split(",")
             state = int(row[6]) # state
@@ -153,7 +153,7 @@ def process_log_enhanced():
         # slice data stream
         time = int(row[0])
         if time < frame_start_time: return -1
-        if time > frame_end_time: return 1
+        if time >= frame_end_time: return 1
         
         state = int(row[6]) # state
         lat = float(row[4]) # latitude

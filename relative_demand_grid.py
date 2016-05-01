@@ -56,8 +56,7 @@ def read_trips():
         # add trip record to the grid
         try:
             grid_time[time_bin][lat_ref][lng_ref]["count"] +=1
-        except KeyError, e:
-            print str(e)
+        except KeyError:
             _out_of_bound+=1
     print "Number of trips out of bound {0}".format(_out_of_bound)
 def read_state_stats():
@@ -70,11 +69,10 @@ def read_state_stats():
                     if state ==0 and value>0:
                         lat_ref = zone.split(",")[0]
                         lng_ref = zone.split(",")[1]
-                    
                         grid_time[hour][lat_ref][lng_ref]["log-value"] += value
                 except:
                     _out_of_bound+=1
-    print "Number of trips out of bound {0}".format(_out_of_bound)
+    print "Number of logs out of bound {0}".format(_out_of_bound)
 ''' synthesize the new grid based on new input '''
 def process_new_grid():
     global new_grid_time

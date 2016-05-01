@@ -30,7 +30,7 @@ def process_zone_driver():
             pop_regions = []
             curr_dict = {"num-regions":0, "num-pop-regions":0, "duration-pop-regions": 0,
                          "duration":0, "income":0, "total-region-weight":0,
-                         "region-ratio":0, "duration-ratio":0,"income-ratio":0,"region-weight-ratio":0}
+                         "region-ratio":"NaN", "duration-ratio":"NaN","income-ratio":"NaN","region-weight-ratio":"NaN"}
             for (region, state) in state_stats[did][time]:
                 duration = state_stats[did][time][(region, state)]
                 curr_dict["duration"] += duration
@@ -57,13 +57,6 @@ def process_zone_driver():
                 _num_driver_time +=1
                 curr_dict["income"] = driver_income[did][time]
             except KeyError:
-#                 print did
-#                 print time
-#                 di_did = driver_income[did]
-#                 print "........"
-#                 print driver_income
-#                 break
-                
                 _num_key_errors+=1
             # count num of distinct regions and pop regions
             curr_dict["num-regions"] = len(regions)
@@ -71,14 +64,14 @@ def process_zone_driver():
             # calculate ratios
             if curr_dict["num-regions"] != 0:
                 # region ratio
-                curr_dict["region-ratio"] = curr_dict["num-pop-regions"]/ curr_dict["num-regions"]
+                curr_dict["region-ratio"] = round(float(curr_dict["num-pop-regions"])/ curr_dict["num-regions"],5)
             if  curr_dict["duration"] != 0:
                 # duration ratio
-                curr_dict["duration-ratio"] = curr_dict["duration-pop-regions"]/curr_dict["duration"]
+                curr_dict["duration-ratio"] = round(float(curr_dict["duration-pop-regions"])/curr_dict["duration"],5)
                 # income ratio
-                curr_dict["income-ratio"] = curr_dict["income"]/curr_dict["duration"]
+                curr_dict["income-ratio"] = round(float(curr_dict["income"])/curr_dict["duration"],5)
                 # region weight ratio
-                curr_dict["region-weight-ratio"] = curr_dict["total-region-weight"]/curr_dict["duration"]
+                curr_dict["region-weight-ratio"] = round(float(curr_dict["total-region-weight"])/curr_dict["duration"],5)
             
             drivers[did][time]= curr_dict
     print "Num driver time {0}\tNum of driver time without trips {1}".format(_num_driver_time,_num_key_errors)
@@ -96,12 +89,11 @@ def write():
             for driver in sorted(drivers):
                 for time in sorted(drivers[driver]):
                     ci = drivers[driver][time]
-                    f.write("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}\n"
+                    f.write("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}\n"
                             .format(driver,time,ci["num-regions"],ci["num-pop-regions"],
                                     ci["duration"],ci["duration-pop-regions"],ci["income"],
-                                    ci["total-region-weight"],round(ci["region-ratio"],5),
-                                    round(ci["duration-ratio"],5), round(ci["income-ratio"],5),
-                                    round(ci["region-weight-ratio"],5)
+                                    ci["total-region-weight"],ci["region-ratio"],
+                                    ci["duration-ratio"], ci["income-ratio"],ci["region-weight-ratio"]
                                     )
                             )
 def dump_aggregated():
@@ -109,9 +101,6 @@ def dump_aggregated():
         out.write("driver-id,num-regions,num-pop-regions,duration,"+
                 "duration-pop-regions,income,total-region-weight,region-ratio,"+
                 "duration-ratio,income-ratio,region-weight-ratio\n")
-#         "num-regions":0, "num-pop-regions":0, "duration-pop-regions": 0,
-#                          "duration":0, "income":0, "total-region-weight":0,
-#                          "region-ratio":0, "duration-ratio":0,"income-ratio":0,"region-weight-ratio":0
         for driver_id in sorted(drivers):
             agg_reg = 0
             agg_pop = 0
@@ -132,13 +121,13 @@ def dump_aggregated():
                 # for region-weight-ratio
                 agg_total_region_weight += cur_bin["total-region-weight"]
                 
-            region_ratio = round(float(agg_pop)/agg_reg,4) if agg_reg!=0 else "NaN"
-            income_ratio = round(agg_inc/agg_dur, 4) if agg_dur!=0 else "NaN"
-            duration_ratio = round(agg_pdur/agg_dur, 4) if agg_dur!=0 else "NaN"
-            region_weight_ratio = round(agg_total_region_weight/agg_dur, 4) if agg_dur!=0 else "NaN"
-            out.write("{0},{1},{2},{3},{4},{5},{6},{7},{8}\n"
+            region_ratio = round(float(agg_pop)/agg_reg,5) if agg_reg!=0 else "NaN"
+            income_ratio = round(float(agg_inc)/agg_dur,5) if agg_dur!=0 else "NaN"
+            duration_ratio = round(float(agg_pdur)/agg_dur,5) if agg_dur!=0 else "NaN"
+            region_weight_ratio = round(agg_total_region_weight/agg_dur,5) if agg_dur!=0 else "NaN"
+            out.write("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}\n"
                       .format(driver_id,agg_reg,agg_pop,agg_dur,agg_pdur,agg_inc,
-                              agg_total_region_weight,region_ratio,duration_ratio, 
+                              round(agg_total_region_weight,8),region_ratio,duration_ratio, 
                               income_ratio,region_weight_ratio
                               )
                       )

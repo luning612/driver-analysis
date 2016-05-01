@@ -38,6 +38,7 @@ class Driver:
         #self.current_hour = ""
         
     def _add_time_to_hour(self, state, hour, time, zone=-1):
+        if time==0: return
         if hour not in self.hour_dict:
             self.hour_dict[hour] = {}
         if zone == -1: # not differentiating zones

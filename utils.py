@@ -12,7 +12,7 @@ def get_coord_bin(lat, lng, lat_bins, lng_bins):
     i = bisect.bisect_right(lat_bins, lat)
     j = bisect.bisect_right(lng_bins, lng)
     if i and j:
-        return i-1, j-1
+        return str(i-1), str(j-1)
     raise ValueError
 
 def get_base_time ():

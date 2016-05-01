@@ -79,7 +79,7 @@ def build_grid():
         for lng in lng_bins:
             if point_in_poly(lat,lng):
                 lng_id += 1
-                curr_lat_bins[lng_ref] = {
+                curr_lat_bins[str(lng_ref)] = {
                     "lat-id":lat_id,
                     "lng-id":lng_id,
                     "lat":round(lat+grain_lat/2, 5),
@@ -89,7 +89,7 @@ def build_grid():
             lng_ref += 1
         if len(curr_lat_bins)!=0:
             lat_id += 1
-            grid[lat_ref] = curr_lat_bins
+            grid[str(lat_ref)] = curr_lat_bins
         lat_ref += 1
 def dump():
     with open(grid_dump_json, 'wb') as f:

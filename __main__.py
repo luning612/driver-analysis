@@ -57,6 +57,6 @@ def main(argv):
      
     import zone_driver
     zone_driver.main(reload=load_all, dump= dump_all)
-
+    print "job done!"
 if __name__ == "__main__":
     main(sys.argv[1:])
