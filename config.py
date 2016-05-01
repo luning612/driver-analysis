@@ -68,7 +68,7 @@ log_break_threashold = 20 # in minutes
 rd_grid_input_file_json = "{0}rd_grid_{1}.json".format(file_dir,file_slug)
 rd_grid_dump_json = rd_grid_input_file_json
 rd_grid_dump_csv = rd_grid_dump_json.replace("json", "csv")
-free_states = [0]
+free_states = [0] # change this if you consider other states as free
 
 '''
 # driver income
